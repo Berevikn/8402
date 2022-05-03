@@ -23,8 +23,6 @@ int main() {
                     if (menu.clickOnButtonStart(sf::Mouse::getPosition(window))) {
                         myField.init();
                         menu.turnStop();
-                    }else if (menu.clickOnButtonResume(sf::Mouse::getPosition(window))) {
-                        menu.turnStop();
                     }
 //                    else if (menu.clickOnButtonSettings(sf::Mouse::getPosition(window))) {
 //                        menu.turnSettings();
