@@ -1,293 +1,308 @@
-#include "Field.h"
+#включить "Field.h"
 
-Field::Field(sf::Vector2f window) {
-    *mSize = window;
-    *mSizeOfOnceSquare = sf::Vector2f((*mSize).x / static_cast<float>(*mSquareOfSideCount), (*mSize).y / static_cast<float>(*mSquareOfSideCount));
-    (*mBackgroundTexture).loadFromFile("..\\square0.png");
-    (*mBackgroundTexture).setRepeated(true);
-    (*mBackgroundTexture).setSmooth(true);
-    (*mWinTexture).loadFromFile("..\\win.png");
-    (*mWinTexture).setSmooth(true);
-    (*mLoseTexture).loadFromFile("..\\lose.png");
-    (*mLoseTexture).setSmooth(true);
-    (*mBackground).setSize(*mSize);
-    (*mWIN).setSize(*mSize);
-    (*mWIN).setTexture(mWinTexture);
-    (*mLOSE).setSize(*mSize);
-    (*mLOSE).setTexture(mLoseTexture);
-    (*mSquareTime).restart();
+Поле::Поле(окно sf::Vector2f) {
+ *mSize = окно;
+ *mSizeOfOnceSquare = sf::Vector2f((*mSize).x / static_cast<float>(*mSquareOfSideCount), (*mSize).y / static_cast<float>(*mSquareOfSideCount));
+ (*mBackgroundTexture).LoadFromFile("..\\square0.png");
+ (*mBackgroundTexture).setRepeated(true);
+ (*mBackgroundTexture).setSmooth(true);
+ (*mWinTexture).LoadFromFile("..\\win.png");
+ (*mWinTexture).setSmooth(true);
+ (*mLoseTexture).LoadFromFile("..\\потерять.png");
+ (*mLoseTexture).setSmooth(true);
+ (*mBackground).setSize(*mSize);
+ (*mWIN).setSize(*mSize);
+ (*mWIN).setTexture(mWinTexture);
+ (*mLOSE).setSize(*Msize);
+ (*mLOSE).setTexture(mLoseTexture);
+ (*mSquareTime).restart();
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
-        mSquares[i] = new Square[*mSquareOfSideCount];
-        mIsEmpty[i] = new bool;
+        mSquares[i] = новый квадрат[*mSquareOfSideCount];
+        mIsEmpty[i] = новый bool;
     }
+
+ *mIsWin = ложь;
+ *mIsLose = false;
 }
 
-void Field::init() {
+ поле void::init() {
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
         for (int j = 0; j < *mSquareOfSideCount; ++j) {
             mIsEmpty[i][j] = true;
         }
     }
-    (*mBackground).setTexture(mBackgroundTexture);
-    (*mBackground).setTextureRect(sf::IntRect(0, 0, (*mSize).x, (*mSize).y));
+ (*mBackground).setTexture(mBackgroundTexture);
+ (*mBackground).setTextureRect(sf::IntRect(0, 0, (*mSize).x, (*mSize).y));
     addSquare();
     addSquare();
 }
 
 
-void Field::addSquare() {
+пустое поле::addSquare() {
     std::srand(std::time(0));
-    do {
-        *mPositionX = std::rand() % *mSquareOfSideCount;
-        *mPositionY = std::rand() % *mSquareOfSideCount;
-    } while(!mIsEmpty[*mPositionY][*mPositionX]);
-    mSquares[*mPositionY][*mPositionX] = *(new Square(*mSizeOfOnceSquare));
+    сделать {
+ *mPositionX = std::rand() % *mSquareOfSideCount;
+ *mPositionY = std::rand() % *mSquareOfSideCount;
+ } в то времякак(!mIsEmpty[*mPositionY][*mPositionX]);
+    mSquares[*mPositionY][*mPositionX] = *(новый квадрат(*mSizeOfOnceSquare));
     mSquares[*mPositionY][*mPositionX].setPosition(
             sf::Vector2f(static_cast<float >(*mPositionX) * (*mSizeOfOnceSquare).x,
                          static_cast<float>(*mPositionY) * (*mSizeOfOnceSquare).y));
     mIsEmpty[*mPositionY][*mPositionX] = false;
 }
 
-void Field::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(*mBackground);
+ поле void::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+ цель.ничья(*mBackground);
     for(int i = 0; i < *mSquareOfSideCount; ++i) {
         for(int j = 0; j < *mSquareOfSideCount; ++j) {
             if (!mIsEmpty[i][j]) {
-                target.draw(mSquares[i][j]);
+ цель.ничья(mSquares[i][j]);
             }
         }
     }
-    if(*mIsWin) {
-        target.draw(*mWIN);
+    если(*mIsWin) {
+ цель.ничья(*mWIN);
     }
     if(*mIsLose){
-        target.draw(*mLOSE);
+ цель.ничья(*mLOSE);
     }
 }
 
-void Field::moveDown() {
+пустое поле::moveDown() {
+ *mIsMoved = false;
     for (int j = 0; j < *mSquareOfSideCount; ++j) {
         shiftDownInOnceLine(j);
         for (int i = *mSquareOfSideCount - 1; i > 0; --i) {
-            if (!mIsEmpty[i][j] && !mIsEmpty[i - 1][j] && mSquares[i][j].getLevel() == mSquares[i - 1][j].getLevel()) {
-                mSquares[i][j].levelUp();
+            if (!mIsEmpty[i][j] &&!mIsEmpty[i - 1][j] && mSquares[i][j].getLevel() == mSquares[i - 1][j].getLevel()) {
+                mSquares[i][j].LevelUp();
                 mIsEmpty[i - 1][j] = true;
+ *mIsMoved = true;
             }
         }
         shiftDownInOnceLine(j);
     }
-    addSquare();
+    if (*mIsMoved) addSquare();
 }
 
-void Field::moveUp() {
+пустое поле::MoveUp() {
+ *mIsMoved = false;
     for (int j = 0; j < *mSquareOfSideCount; ++j) {
-        shiftUpInOnceLine(j);
+        Shiftupinoncel(j);
         for (int i = 0; i < *mSquareOfSideCount - 1; ++i) {
-            if (!mIsEmpty[i][j] && !mIsEmpty[i + 1][j] && mSquares[i][j].getLevel() == mSquares[i + 1][j].getLevel()) {
-                mSquares[i][j].levelUp();
+            if (!mIsEmpty[i][j] &&!mIsEmpty[i + 1][j] && mSquares[i][j].getLevel() == mSquares[i + 1][j].getLevel()) {
+                mSquares[i][j].LevelUp();
                 mIsEmpty[i + 1][j] = true;
+ *mIsMoved = true;
             }
         }
-        shiftUpInOnceLine(j);
+        Shiftupinoncel(j);
     }
-    addSquare();
+    if (*mIsMoved) addSquare();
 }
 
-void Field::moveLeft() {
+пустое поле::moveLeft() {
+ *mIsMoved = false;
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
         shiftLeftInOnceLine(i);
         for (int j = 0; j < *mSquareOfSideCount - 1; ++j) {
-            if (!mIsEmpty[i][j] && !mIsEmpty[i][j + 1] && mSquares[i][j].getLevel() == mSquares[i][j + 1].getLevel()) {
-                mSquares[i][j].levelUp();
+            if (!mIsEmpty[i][j] &&!mIsEmpty[i][j + 1] && mSquares[i][j].getLevel() == mSquares[i][j + 1].getLevel()) {
+                mSquares[i][j].LevelUp();
                 mIsEmpty[i][j + 1] = true;
+ *mIsMoved = true;
             }
         }
         shiftLeftInOnceLine(i);
     }
-    addSquare();
+    if (*mIsMoved) addSquare();
 }
 
 
-void Field::moveRight() {
+ Поле void::moveRight() {
+ *mIsMoved = false;
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
         shiftRightInOnceLine(i);
         for (int j = *mSquareOfSideCount - 1; j > 0; --j) {
-            if (!mIsEmpty[i][j] && !mIsEmpty[i][j - 1] && mSquares[i][j].getLevel() == mSquares[i][j - 1].getLevel()) {
-                mSquares[i][j].levelUp();
+            if (!mIsEmpty[i][j] &&!mIsEmpty[i][j - 1] && mSquares[i][j].getLevel() == mSquares[i][j - 1].getLevel()) {
+                mSquares[i][j].LevelUp();
                 mIsEmpty[i][j - 1] = true;
+ *mIsMoved = true;
             }
         }
         shiftRightInOnceLine(i);
     }
-    addSquare();
+    if (*mIsMoved) addSquare();
 }
 
-Field::~Field() {
+Поле::~Поле() {
     for(int i = 0; i < *mSquareOfSideCount; ++i) {
-        delete mSquares[i];
-        delete mIsEmpty[i];
+        удалить mSquares[i];
+        удалить пустое[i];
     }
-    delete[] mSquares;
-    delete[] mIsEmpty;
-    delete mSquaresCountMoved;
-    delete mSizeOfOnceSquare;
-    delete mSize;
-    delete mPositionX;
-    delete mBackground;
-    delete mBackgroundTexture;
-    delete mSquareTime;
-    delete mPositionY;
-    delete mSquareOfSideCount;
-    delete mIsWin;
-    delete mWinTexture;
-    delete mWIN;
-    delete mIsLose;
-    delete mLoseTexture;
-    delete mLOSE;
+    удалить[] mSquares;
+    удалить[] Неправильно;
+    удалить mSquaresCountMoved;
+    удалить mSizeOfOnceSquare;
+    удалить mSize;
+    удалить mPositionX;
+    удалить mBackground;
+    удалить mBackgroundTexture;
+    удалить mSquareTime;
+    удалить mPositionY;
+    удалить mSquareOfSideCount;
+    удалить mIsWin;
+    удалить mWinTexture;
+    удалить mWIN;
+    удалить mIsLose;
+    удалить mLoseTexture;
+    удалить mLOSE;
 }
 
-void Field::isWin() {
+пустое поле::isWin() {
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
         for (int j = 0; j < *mSquareOfSideCount; ++j) {
-            if (!mIsEmpty[i][j] and mSquares[i][j].getLevel() == 11) {
-                *mIsWin = true;
+            if (!mIsEmpty[i][j] и mSquares[i][j].getLevel() == 11) {
+ *mIsWin = истина;
             }
         }
     }
 }
 
-bool Field::isLose() {
+ Поле bool::isLose() {
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
         for (int j = 0; j < *mSquareOfSideCount; ++j) {
             if(mIsEmpty[i][j]) {
-                *mIsLose = false;
-                return false;
+ *mIsLose = false;
+                возврат false;
             }
         }
     }
-    std::stack<int>* previous = new std::stack<int>;
+ std::stack<int>* previous = новый std::stack<int>;
     int** status = new int*[*mSquareOfSideCount];
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
-        status[i] = new int[*mSquareOfSideCount];
+ status[i] = new int[*mSquareOfSideCount];
         for (int j = 0; j < *mSquareOfSideCount; ++j) {
-            status[i][j] = 0;
+ статус[i][j] = 0;
         }
     }
     int i = 0, j = 0;
-    std::cout << "try: ";
-    while (!(*previous).empty() || status[0][0] != 2) {
-        std::cout << "I here: ";
-        switch (status[i][j]) {
-            case 0:
-                std::cout << "0, ";
-                ++status[i][j];
+ std::cout << "try: ";
+    в то время как (!(* предыдущий).пусто() || статус[0][0] != 2) {
+ std::cout << "Я здесь: ";
+        переключатель (состояние [i][j]) {
+            случай 0:
+ std::cout << "0, ";
+ ++статус[i][j];
                 if (i != *mSquareOfSideCount - 1) {
                     if (mSquares[i][j].getLevel() == mSquares[i + 1][j].getLevel()) {
-                        *mIsLose = false;
-                        return false;
+ *mIsLose = false;
+                        возврат false;
                     }
                     if (status[i + 1][j] != 2) {
-                        previous->push(1);
-                        ++i;
+ предыдущий->push(1);
+ ++я;
                     }
                 }
-                break;
-            case 1:
-                std::cout << "1, ";
-                ++status[i][j];
+                перерыв;
+            случай 1:
+ std::cout << "1, ";
+ ++статус[i][j];
                 if (j != *mSquareOfSideCount - 1) {
                     if (mSquares[i][j].getLevel() == mSquares[i][j + 1].getLevel()) {
-                        *mIsLose = false;
-                        return false;
+ *mIsLose = false;
+                        возврат false;
                     }
                     if (status[i][j + 1] != 2) {
-                        previous->push(2);
-                        ++j;
+ предыдущий->push(2);
+ ++j;
                     }
                 }
-                break;
-            case 2:
-                std::cout << "2, ";
+                перерыв;
+            случай 2:
+ std::cout << "2, ";
                 if (previous->top() == 1) {
-                    --i;
-                } else {
-                    --j;
+ --я;
+ } еще {
+ --j;
                 }
-                previous->pop();
-                break;
-            default:
-                std::cout << "INFINITY";
-                break;
+ предыдущий->pop();
+                перерыв;
+            По умолчанию:
+ std::cout << "БЕСКОНЕЧНОСТЬ";
+                перерыв;
         }
-        std::cout << std::endl;
+ std::cout << std::endl;
     }
-    delete previous;
+    удалить предыдущий;
     for (int k = 0; k < *mSquareOfSideCount; ++k) {
-        delete status[k];
+        удалить статус[k];
     }
-    delete[] status;
-    *mIsLose = true;
-    return true;
+    удалить[] статус;
+ *mIsLose = true;
+    верните true;
 }
 
-void Field::shiftDownInOnceLine(int j) {
-    *mSquaresCountMoved = 0;
+ Поле void::shiftdowninoncel(int j) {
+ *mSquaresCountMoved = 0;
     for (int i = *mSquareOfSideCount - 1; i >= 0; --i) {
-        if(!mIsEmpty[i][j]) {
+        если(!mIsEmpty[i][j]) {
+            if (*mSquareOfSideCount - 1 - *mSquaresCountMoved != i) *mIsMoved = true;
             mIsEmpty[i][j] = true;
             mIsEmpty[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j] = false;
             mSquares[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j] = mSquares[i][j];
-            mSquares[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j].move(
-                    sf::Vector2f(mSquares[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j].getPosition().x,
-                                 (float) (*mSquareOfSideCount - 1 - *mSquaresCountMoved) *
-                                 (*mSizeOfOnceSquare).y));
-            ++(*mSquaresCountMoved);
+            mSquares[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j].переместить(
+                    sf::Vector2f(mSquares[*mSquareOfSideCount - 1 - *mSquaresCountMoved][j].GetPosition().x,
+ (float) (*mSquareOfSideCount - 1 - *mSquaresCountMoved) *
+ (*mSizeOfOnceSquare).y));
+ ++(*mSquaresCountMoved);
         }
     }
 }
 
-void Field::shiftRightInOnceLine(int i) {
-    *mSquaresCountMoved = 0;
+ поле void::shiftRightInOnceLine(int i) {
+ *mSquaresCountMoved = 0;
     for (int j = *mSquareOfSideCount - 1; j >= 0; --j) {
-        if(!mIsEmpty[i][j]) {
+        если(!mIsEmpty[i][j]) {
+            if (*mSquareOfSideCount - 1 - *mSquaresCountMoved != j) *mIsMoved = true;
             mIsEmpty[i][j] = true;
             mIsEmpty[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved] = false;
             mSquares[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved] = mSquares[i][j];
-            mSquares[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved].move(
+            mSquares[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved].переместить(
                     sf::Vector2f(
-                            (float) (*mSquareOfSideCount - 1 - *mSquaresCountMoved) * (*mSizeOfOnceSquare).x,
-                            mSquares[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved].getPosition().y));
-            ++(*mSquaresCountMoved);
+ (float) (*mSquareOfSideCount - 1 - *mSquaresCountMoved) * (*mSizeOfOnceSquare).x,
+                            mSquares[i][*mSquareOfSideCount - 1 - *mSquaresCountMoved].GetPosition().y));
+ ++(*mSquaresCountMoved);
         }
     }
 }
 
-void Field::shiftUpInOnceLine(int j) {
-    *mSquaresCountMoved = 0;
+ поле void::shiftupinoncel(int j) {
+ *mSquaresCountMoved = 0;
     for (int i = 0; i < *mSquareOfSideCount; ++i) {
-        if(!mIsEmpty[i][j]) {
+        если(!mIsEmpty[i][j]) {
+            if (*mSquaresCountMoved != i) *mIsMoved = true;
             mIsEmpty[i][j] = true;
             mIsEmpty[*mSquaresCountMoved][j] = false;
             mSquares[*mSquaresCountMoved][j] = mSquares[i][j];
-            mSquares[*mSquaresCountMoved][j].move(
-                    sf::Vector2f(mSquares[*mSquaresCountMoved][j].getPosition().x,
-                                 (float) (*mSquaresCountMoved) * (*mSizeOfOnceSquare).y));
-            ++(*mSquaresCountMoved);
+            mSquares[*mSquaresCountMoved][j].переместить(
+                    sf::Vector2f(mSquares[*mSquaresCountMoved][j].GetPosition().x,
+ (float) (*mSquaresCountMoved) * (*mSizeOfOnceSquare).y));
+ ++(*mSquaresCountMoved);
         }
     }
 }
 
-void Field::shiftLeftInOnceLine(int i) {
-    *mSquaresCountMoved = 0;
+ поле void::shiftLeftInOnceLine(int i) {
+ *mSquaresCountMoved = 0;
     for (int j = 0; j < *mSquareOfSideCount; ++j) {
-        if(!mIsEmpty[i][j]) {
+        если(!mIsEmpty[i][j]) {
+            if (*mSquaresCountMoved != j) *mIsMoved = true;
             mIsEmpty[i][j] = true;
             mIsEmpty[i][*mSquaresCountMoved] = false;
             mSquares[i][*mSquaresCountMoved] = mSquares[i][j];
-            mSquares[i][*mSquaresCountMoved].move(
+            mSquares[i][*mSquaresCountMoved].переместить(
                     sf::Vector2f((float) (*mSquaresCountMoved) * (*mSizeOfOnceSquare).x,
-                                 mSquares[i][*mSquaresCountMoved].getPosition().y));
-            ++(*mSquaresCountMoved);
+                                 mSquares[i][*mSquaresCountMoved].GetPosition().y));
+ ++(*mSquaresCountMoved);
         }
     }
 }
