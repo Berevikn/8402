@@ -1,59 +1,57 @@
 #ifndef EVENTS_FIELD_H
 #define EVENTS_FIELD_H
 
-#include <SFML/Graphics.hpp>
-#include "Square.h"
-#include <stack>
-#include <iostream>
+#включить <SFML/Graphics.hpp>
+#включить "Square.h"
+#включить <стек>
+#включить <iostream>
 
-class Field: public sf::Drawable {
-public:
+ поле класса: public sf::Drawable {
+публичный:
 
-    explicit Field(sf::Vector2f window);
+    явное поле(окно sf::Vector2f);
 
     void init();
 
     void moveDown();
     void moveRight();
-    void moveUp();
+    void MoveUp();
     void moveLeft();
 
     void isWin();
 
     bool isLose();
 
-    ~Field() override;
+    ~Переопределение Field();
 
-private:
+Частное:
 
-    void shiftDownInOnceLine(int j);
-    void shiftRightInOnceLine(int i);
-    void shiftUpInOnceLine(int j);
-    void shiftLeftInOnceLine(int i);
+    void Shiftdowninoncel(int j);
+    void Shiftrightinoncel(int i);
+    void Shiftupinoncel(int j);
+    void Shiftleftinoncel(int i);
 
     void addSquare();
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-    sf::RectangleShape* mBackground = new sf::RectangleShape;
-    sf::RectangleShape* mWIN = new sf::RectangleShape;
-    sf::RectangleShape* mLOSE = new sf::RectangleShape;
-    sf::Vector2f* mSize = new sf::Vector2f;
-    sf::Vector2f* mSizeOfOnceSquare = new sf::Vector2f;
-    sf::Clock* mSquareTime = new sf::Clock;
-    sf::Texture* mBackgroundTexture = new sf::Texture;
-    sf::Texture* mWinTexture = new sf::Texture;
-    sf::Texture* mLoseTexture = new sf::Texture;
-    int* mPositionX = new int;
-    int* mPositionY = new int;
+ sf::RectangleShape* mBackground = новый sf::RectangleShape;
+ sf::RectangleShape* mWIN = новый sf::RectangleShape;
+ sf::RectangleShape* mLOSE = новый sf::RectangleShape;
+ sf::Vector2f* mSize = новый sf::Vector2f;
+ sf::Vector2f* mSizeOfOnceSquare = новый sf::Vector2f;
+ sf::Clock* mSquareTime = новый sf::Часы;
+ sf::Texture* mBackgroundTexture = новая sf::Текстура;
+ sf::Текстура* mWinTexture = новая sf::Текстура;
+ sf::Texture* mLoseTexture = новый sf::Текстура;
+    int* mPositionX = новый int;
+    int* mPositionY = новый int;
     int* mSquareOfSideCount = new int(4);
-    int* mSquaresCountMoved = new int;
-    Square** mSquares = new Square*[*mSquareOfSideCount];
+    int* mSquaresCountMoved = новый int;
+ Квадрат** mSquares = новый квадрат*[*mSquareOfSideCount];
     bool** mIsEmpty = new bool*[*mSquareOfSideCount];
-    bool* mIsWin = new bool(false);
-    bool* mIsLose = new bool(false);
+    bool* mIsWin = новый bool;
+    bool* mIsLose = новый bool;
+    bool* mIsMoved = новый bool;
 };
-
-
-
 #endif //EVENTS_FIELD_H
